@@ -65,6 +65,13 @@ def k_distances(data, m_k, func):
 def assignToCluster(distances):
     return np.argmin(distances, axis=1)
 
+# Compute new Cluster Centers    
+# args data clucsters
+def computeClusterCenter(data, clusters, m_k):
+    for i in range(k):
+        m_k[i,:] = np.mean(data[clusters == i], axis=0)
+    return m_k
+    
 # Compute Cost J
 def costFunction(data, distances, cluster_assignments):
     J = 0
@@ -85,6 +92,7 @@ k = 3
 m_k = select_k_random_points(X_data, k)
 distances = k_distances(X_data, m_k, euclideanDistance) 
 cluster_assignment = assignToCluster(distances)
+labelsColors = labelColorCoding(cluster_assignment)
 
 
 
