@@ -52,8 +52,9 @@ def select_k_random_points(data, k):
 m_k = select_k_random_points(X_data, k)
 
 
-
-
+# Distance function
+def euclideanDistance(data, testPoint):
+    return np.sqrt(np.sum((data - testPoint)**2, axis=1))
 
 
 
