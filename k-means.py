@@ -33,5 +33,14 @@ z = np.hstack((z1,z2,z3))
 X = np.vstack((x,y,z)).T
 np.random.shuffle(X)
 labels = ['red' if c == 1 else 'green' if c == 2 else 'blue' for c in X[:,2]] 
-plt.scatter(X[:,0], X[:,1], color=labels)
 X_data = X[:,:2]
+
+def plot_and_save_fig():
+    plt.scatter(X[:,0], X[:,1], color=labels)
+    plt.savefig("OriginalClusters.png")
+    plt.show()
+
+
+
+
+
