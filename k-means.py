@@ -56,8 +56,15 @@ m_k = select_k_random_points(X_data, k)
 def euclideanDistance(data, testPoint):
     return np.sqrt(np.sum((data - testPoint)**2, axis=1))
 
+# def compute nxk distances
 
+def k_distances(data, m_k, func):
+    distances = np.zeros((data.shape[0], m_k.shape[0]))
+    for i in range(m_k.shape[0]):
+        distances[:,i] = func(data, m_k[i,:])
+    return distances
 
+distances = k_distances(X_data, m_k, euclideanDistance) 
 
 
 
