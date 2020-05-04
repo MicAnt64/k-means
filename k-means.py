@@ -66,5 +66,7 @@ def k_distances(data, m_k, func):
 
 distances = k_distances(X_data, m_k, euclideanDistance) 
 
-
+# Find smallest distance and return index, expected output n by k 
+# This is the cluster assignment
+cluster_assignment = np.argmin(distances, axis=1)
 
