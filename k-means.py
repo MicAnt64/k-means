@@ -35,9 +35,9 @@ np.random.shuffle(X)
 labels = ['red' if c == 1 else 'green' if c == 2 else 'blue' for c in X[:,2]] 
 X_data = X[:,:2]
 
-def plot_and_save_fig():
-    plt.scatter(X[:,0], X[:,1], color=labels)
-    plt.savefig("OriginalClusters.png")
+def plot_and_save_fig(data, title, labels):
+    plt.scatter(data[:,0], data[:,1], color=labels)
+    plt.savefig(title)
     plt.show()
 
 
