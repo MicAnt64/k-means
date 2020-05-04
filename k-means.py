@@ -41,6 +41,22 @@ def plot_and_save_fig():
     plt.show()
 
 
+# Select k
+k = 3
+
+# Initialize K random points (indices) for cluster centers
+def select_k_random_points(data, k):
+    idx = np.random.choice(data.shape[0], size=k)
+    return data[idx,:]
+
+m_k = select_k_random_points(X_data, k)
+
+
+
+
+
+
+
 
 
 
