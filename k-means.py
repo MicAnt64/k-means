@@ -70,3 +70,18 @@ distances = k_distances(X_data, m_k, euclideanDistance)
 # This is the cluster assignment
 cluster_assignment = np.argmin(distances, axis=1)
 
+# Compute Cost J
+def costFunction(data, distances, cluster_assignments):
+    J = 0
+    for i in range(cluster_assignments.shape[0]):
+        J += distances[i][cluster_assignments[i]]
+    return J
+
+# Convergence function
+def converge(distanceOld, distanceNew, epsilon=0.0001):
+    if np.abs(distanceOld - distanceNew) < epsilon:
+        return True
+    else:
+        return False
+
+    
