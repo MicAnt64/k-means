@@ -1,1 +1,2 @@
-OriginalClusters.png
+*.png
+.DS_Store
