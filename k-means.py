@@ -9,10 +9,8 @@ Created on Sun May  3 18:29:54 2020
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Create Dataset in 2D space (100, 100)
-# Each sample will have 2 dims (x,y)
-# Each class will have 50 data points
 
+# Create toy data set
 mu1 = [39, 50]
 mu2 = [28, 58]
 mu3 = [27, 40]
@@ -31,18 +29,49 @@ y = np.hstack((y1,y2,y3))
 z = np.hstack((z1,z2,z3))
 
 X = np.vstack((x,y,z)).T
+
+
+# Obtain n number of colors
+colors_orig = plt.cm.jet(np.linspace(0,1,3))
+
+# Empty array to hold colors
+labels_init_orig = []
+
+# Loop through all observations
+for i in range(X.shape[0]):
+    ## grab the class (convert to int)
+    j = X[i,2].astype(int)
+    # Assign the class to an associated color
+    labels_init_orig.append(colors_orig[j-1,:])
+
+
+# Plot
+plt.figure()    
+plt.scatter(X[:,0], X[:,1], color=labels_init_orig)
+plt.scatter(X[:,0], X[:,1], color=labels_init_orig)
+plt.savefig("Original Clusters.png")
+plt.close()
+
+
 np.random.shuffle(X)
-labels_init = ['red' if c == 1 else 'green' if c == 2 else 'blue' for c in X[:,2]] 
 X_data = X[:,:2]
 
 
-def plot_and_save_fig(data, title, labels):
-    plt.scatter(data[:,0], data[:,1], color=labels)
-    plt.savefig(title)
-    plt.show()
+def labelColorCoding(colors, labels):
+    labels_init = []
+    # Loop through all observations
+    for i in range(labels.shape[0]):
+        ## grab the class (convert to int)
+        j = labels[i].astype(int)
+        # Assign the class to an associated color
+        labels_init.append(colors[j,:])
+    return labels_init
 
-def labelColorCoding(data):
-    return ['red' if c == 1 else 'green' if c == 2 else 'blue' for c in data] 
+def plot_and_save_fig(data, title, labels, m_k):
+    plt.figure()
+    plt.scatter(data[:,0], data[:,1], color=labels)
+    plt.scatter(m_k[:,0], m_k[:,1], marker="x", s=20, c="black")
+    plt.savefig(title)
 
 # Initialize K random points (indices) for cluster centers
 def select_k_random_points(data, k):
@@ -80,22 +109,57 @@ def costFunction(data, distances, cluster_assignments):
     return J
 
 # Convergence function
-def converge(distanceOld, distanceNew, epsilon=0.0001):
-    if np.abs(distanceOld - distanceNew) < epsilon:
+def converge(costOld, costNew, epsilon=0.0001):
+    if np.abs(costOld - costNew) < epsilon:
         return True
     else:
         return False
 
 
 # Select k
-k = 3
+k = 5
+colors = plt.cm.jet(np.linspace(0,1,k))
+firstRun = True
+hasConverged = False
+iteration = 0
 m_k = select_k_random_points(X_data, k)
-distances = k_distances(X_data, m_k, euclideanDistance) 
-cluster_assignment = assignToCluster(distances)
-labelsColors = labelColorCoding(cluster_assignment)
+oldCost = None
 
 
+while (hasConverged == False):
+    
+    iteration += 1
+    distances = k_distances(X_data, m_k, euclideanDistance) 
+    cluster_assignment = assignToCluster(distances)
+    m_k = computeClusterCenter(X_data, cluster_assignment, m_k)
+    cost = costFunction(X_data, distances, cluster_assignment)
+    print("The cost is: " + str(cost))
+    #print(m_k)
 
+    #Plot new data pts and centroids
+    labelsColors = labelColorCoding(colors, cluster_assignment)
+    title = "Iter - #: " + str(iteration)
+    plot_and_save_fig(X_data, title, labelsColors, m_k)
+    
+    
+    #check for convergence
+    if not firstRun:
+        hasConverged = converge(oldCost, cost)
+    oldCost = cost
+    
+    if firstRun:
+        plt.scatter(X_data[:,0], X_data[:,1])
+        plt.savefig("Iter - #: " + str(iteration - 1))
+        firstRun = False
+    #Print iter and cost, display cost?
+
+        
+    
+
+
+## Create Data func
+## __main__ kwargs
+## Make into classes
 
 
 
